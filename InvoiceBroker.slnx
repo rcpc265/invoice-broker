@@ -6,6 +6,7 @@
     <Project Path="src/InvoiceBroker.Infrastructure/InvoiceBroker.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/InvoiceBroker.IntegrationTests/InvoiceBroker.IntegrationTests.csproj" />
     <Project Path="tests/InvoiceBroker.UnitTests/InvoiceBroker.UnitTests.csproj" />
   </Folder>
 </Solution>
