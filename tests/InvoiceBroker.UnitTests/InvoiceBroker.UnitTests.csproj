@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\InvoiceBroker.Domain\InvoiceBroker.Domain.csproj" />
+    <ProjectReference Include="..\..\src\InvoiceBroker.Application\InvoiceBroker.Application.csproj" />
   </ItemGroup>
 
 </Project>
