@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\InvoiceBroker.Application\InvoiceBroker.Application.csproj" />
+    <ProjectReference Include="..\InvoiceBroker.Infrastructure\InvoiceBroker.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

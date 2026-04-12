@@ -1,8 +1,28 @@
+using InvoiceBroker.Application.Commands.IssueComprobante;
+using InvoiceBroker.Domain.Repositories;
+using InvoiceBroker.Infrastructure.Persistence;
+using InvoiceBroker.Infrastructure.Persistence.Repositories;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+// Register Infrastructure
+builder.Services.AddDbContext<InvoiceBrokerDbContext>(options =>
+{
+    // Usaremos un connection string temporal. En el futuro usaremos appsettings.json y secretos
+    options.UseSqlServer("Server=.;Database=InvoiceBrokerDb;Trusted_Connection=True;TrustServerCertificate=True;");
+});
+
+builder.Services.AddScoped<IComprobanteRepository, ComprobanteRepository>();
+
+// Register Application (MediatR)
+builder.Services.AddMediatR(cfg => {
+    cfg.RegisterServicesFromAssembly(typeof(IssueComprobanteCommand).Assembly);
+});
 
 var app = builder.Build();
 
@@ -14,28 +34,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+// Our Minimal API Endpoint
+app.MapPost("/api/comprobantes", async (IssueComprobanteCommand command, IMediator mediator) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
+    Guid id = await mediator.Send(command);
+    return Results.Ok(new { Id = id });
 })
-.WithName("GetWeatherForecast");
+.WithName("IssueComprobante");
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
