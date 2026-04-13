@@ -1,5 +1,6 @@
 using FluentAssertions;
 using InvoiceBroker.Domain.Entities;
+using InvoiceBroker.Domain.ValueObjects;
 using InvoiceBroker.Infrastructure.Persistence;
 using InvoiceBroker.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -16,21 +17,22 @@ public class ComprobanteRepositoryTests
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
             
-        using var dbContext = new InvoiceBrokerDbContext(options);
-        var repository = new ComprobanteRepository(dbContext);
-        var comprobante = new Comprobante 
-        { 
-            Id = Guid.NewGuid(),
-            Serie = "F001", 
-            Correlativo = "00000001" 
-        };
+        using InvoiceBrokerDbContext dbContext = new InvoiceBrokerDbContext(options);
+        ComprobanteRepository repository = new ComprobanteRepository(dbContext);
+        
+        Guid id = Guid.NewGuid();
+        Serie serie = new Serie("F001");
+        Correlativo correlativo = new Correlativo("1"); // It will pad to 00000001
+        
+        Comprobante comprobante = new Comprobante(id, serie, correlativo, 100m);
 
         // When
         await repository.AddAsync(comprobante);
 
         // Then
-        var savedComprobante = await dbContext.Comprobantes.FirstOrDefaultAsync();
+        Comprobante? savedComprobante = await dbContext.Comprobantes.FirstOrDefaultAsync();
         savedComprobante.Should().NotBeNull();
-        savedComprobante!.Serie.Should().Be("F001");
+        savedComprobante!.Serie.Value.Should().Be("F001");
+        savedComprobante.Correlativo.Value.Should().Be("00000001");
     }
 }

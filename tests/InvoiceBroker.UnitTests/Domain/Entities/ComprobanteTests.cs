@@ -1,24 +1,22 @@
 using FluentAssertions;
 using InvoiceBroker.Domain.Entities;
+using InvoiceBroker.Domain.ValueObjects;
 
 namespace InvoiceBroker.UnitTests.Domain.Entities;
 
 public class ComprobanteTests
 {
     [Fact]
-    public void Given_ComprobanteWithSubTotal_When_CalculateTotals_Then_IgvAndTotalAreCorrectlyCalculated()
+    public void Given_ComprobanteWithSubTotal_When_Created_Then_IgvAndTotalAreCorrectlyCalculated()
     {
         // Given
-        var comprobante = new Comprobante
-        {
-            Id = Guid.NewGuid(),
-            Serie = "F001",
-            Correlativo = "00000001",
-            SubTotal = 100m
-        };
+        Guid id = Guid.NewGuid();
+        Serie serie = new Serie("F001");
+        Correlativo correlativo = new Correlativo("1");
+        decimal subTotal = 100m;
 
         // When
-        comprobante.CalculateTotals();
+        Comprobante comprobante = new Comprobante(id, serie, correlativo, subTotal);
 
         // Then
         comprobante.Igv.Should().Be(18m);
