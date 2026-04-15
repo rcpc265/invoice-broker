@@ -10,28 +10,33 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 
-// Register Infrastructure
+// Capa de Infraestructura (Base de datos en Memoria por defecto para MVP)
 builder.Services.AddDbContext<InvoiceBrokerDbContext>(options =>
-{
-    // Usaremos un connection string temporal. En el futuro usaremos appsettings.json y secretos
-    options.UseSqlServer("Server=.;Database=InvoiceBrokerDb;Trusted_Connection=True;TrustServerCertificate=True;");
-});
-
+    options.UseInMemoryDatabase("InvoiceBrokerDb"));
 builder.Services.AddScoped<IComprobanteRepository, ComprobanteRepository>();
 
-// Register Application (MediatR)
-builder.Services.AddMediatR(cfg => {
-    cfg.RegisterServicesFromAssembly(typeof(IssueComprobanteCommand).Assembly);
-});
+// Capa de Aplicación (MediatR)
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IssueComprobanteCommand).Assembly));
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    // Generación de JSON OpenAPI (Nativo)
     app.MapOpenApi();
+    
+    // UI 1: Scalar (El moderno)
     app.MapScalarApiReference();
+
+    // UI 2: Swagger Clásico (El viejo confiable)
+    app.UseSwagger();
+    app.UseSwaggerUI(c => 
+    {
+        c.SwaggerEndpoint("/openapi/v1.json", "InvoiceBroker API");
+    });
 }
 
 app.UseHttpsRedirection();
