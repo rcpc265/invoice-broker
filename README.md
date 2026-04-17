@@ -4,17 +4,17 @@
 
 ## 🚀 Inicio Rápido (Para Reclutadores / Devs sin Docker)
 
-No necesitas configurar nada complejo. El proyecto incluye una base de datos en memoria para pruebas rápidas.
+No se requiere configuración compleja. El proyecto incluye una base de datos en memoria para pruebas rápidas.
 
-1. Clona el repositorio.
-2. Abre una terminal en la raíz del proyecto.
-3. Ejecuta:
+1. Clonar el repositorio.
+2. Abrir una terminal en la raíz del proyecto.
+3. Ejecutar:
    ```bash
    dotnet run --project src/InvoiceBroker.Api
    ```
-4. Abre tu navegador en: **http://localhost:5000/scalar/v1**
+4. Navegar a la siguiente dirección: **http://localhost:5000/scalar/v1** o **http://localhost:5000/swagger**
 
-Verás el **Panel Interactivo (Scalar)** donde podrás probar la API enviando peticiones JSON con un solo clic.
+Se mostrará el **Panel Interactivo** donde es posible probar la API enviando peticiones JSON pre-configuradas con un solo clic.
 
 ## 📦 Arquitectura
 Este proyecto sigue estrictamente los principios de **Clean Architecture** (Dominio, Aplicación, Infraestructura, API) y **Domain-Driven Design (DDD)** (Value Objects, Encapsulamiento, Inmutabilidad).
