@@ -3,15 +3,19 @@ using InvoiceBroker.Domain.Repositories;
 using InvoiceBroker.Domain.ValueObjects;
 using MediatR;
 
+using InvoiceBroker.Application.Common.Interfaces;
+
 namespace InvoiceBroker.Application.Commands.IssueComprobante;
 
 public class IssueComprobanteCommandHandler : IRequestHandler<IssueComprobanteCommand, Guid>
 {
     private readonly IComprobanteRepository _repository;
+    private readonly ISunatService _sunatService;
 
-    public IssueComprobanteCommandHandler(IComprobanteRepository repository)
+    public IssueComprobanteCommandHandler(IComprobanteRepository repository, ISunatService sunatService)
     {
         _repository = repository;
+        _sunatService = sunatService;
     }
 
     public async Task<Guid> Handle(IssueComprobanteCommand request, CancellationToken cancellationToken)
@@ -27,6 +31,9 @@ public class IssueComprobanteCommandHandler : IRequestHandler<IssueComprobanteCo
         );
 
         await _repository.AddAsync(comprobante);
+        
+        // Simular entrega a SUNAT
+        await _sunatService.SendAsync(comprobante, cancellationToken);
 
         return comprobante.Id;
     }

@@ -16,6 +16,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<InvoiceBrokerDbContext>(options =>
     options.UseInMemoryDatabase("InvoiceBrokerDb"));
 builder.Services.AddScoped<IComprobanteRepository, ComprobanteRepository>();
+builder.Services.AddScoped<InvoiceBroker.Application.Common.Interfaces.ISunatService, InvoiceBroker.Infrastructure.Services.MockSunatService>();
 
 // Capa de Aplicación (MediatR)
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IssueComprobanteCommand).Assembly));

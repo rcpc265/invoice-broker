@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InvoiceBroker.Domain\InvoiceBroker.Domain.csproj" />
+    <ProjectReference Include="..\InvoiceBroker.Application\InvoiceBroker.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

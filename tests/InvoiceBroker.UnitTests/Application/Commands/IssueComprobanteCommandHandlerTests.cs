@@ -1,5 +1,6 @@
 using FluentAssertions;
 using InvoiceBroker.Application.Commands.IssueComprobante;
+using InvoiceBroker.Application.Common.Interfaces;
 using InvoiceBroker.Domain.Entities;
 using InvoiceBroker.Domain.Repositories;
 using NSubstitute;
@@ -9,11 +10,12 @@ namespace InvoiceBroker.UnitTests.Application.Commands;
 public class IssueComprobanteCommandHandlerTests
 {
     [Fact]
-    public async Task Given_ValidCommand_When_Handling_Then_CallsRepositoryAndReturnsId()
+    public async Task Given_ValidCommand_When_Handling_Then_CallsRepositoryAndSunatService()
     {
         // Given
         var repositoryMock = Substitute.For<IComprobanteRepository>(); 
-        var handler = new IssueComprobanteCommandHandler(repositoryMock);
+        var sunatMock = Substitute.For<ISunatService>();
+        var handler = new IssueComprobanteCommandHandler(repositoryMock, sunatMock);
         
         var command = new IssueComprobanteCommand 
         {
@@ -28,5 +30,6 @@ public class IssueComprobanteCommandHandlerTests
         // Then
         result.Should().NotBeEmpty(); 
         await repositoryMock.Received(1).AddAsync(Arg.Any<Comprobante>());
+        await sunatMock.Received(1).SendAsync(Arg.Any<Comprobante>(), Arg.Any<CancellationToken>());
     }
 }
