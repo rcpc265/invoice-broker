@@ -14,7 +14,9 @@ public class Comprobante
     private const decimal IGV_RATE = 0.18m;
 
     // EF Core requiere un constructor sin parámetros privado
+#pragma warning disable CS8618
     private Comprobante() { }
+#pragma warning restore CS8618
 
     public Comprobante(Guid id, Serie serie, Correlativo correlativo, decimal subTotal)
     {
