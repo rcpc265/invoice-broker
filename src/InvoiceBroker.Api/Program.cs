@@ -49,24 +49,7 @@ app.MapPost("/api/comprobantes", async (IssueComprobanteCommand command, IMediat
     return Results.Ok(new { Id = id });
 })
 .WithName("IssueComprobante")
-.WithOpenApi(operation =>
-{
-    // Autocompletado funcional para Swagger y Scalar
-    operation.Summary = "Emite un nuevo comprobante electrónico (SUNAT)";
-    operation.Description = "Valida y procesa un comprobante usando UBL 2.1.";
-    
-    if (operation.RequestBody?.Content.TryGetValue("application/json", out var content) == true)
-    {
-        // En .NET 9/10 OpenAPI usa System.Text.Json.Nodes
-        content.Example = System.Text.Json.Nodes.JsonNode.Parse("""
-        {
-            "serie": "F001",
-            "correlativo": "1",
-            "subTotal": 1000.50
-        }
-        """);
-    }
-    return operation;
-});
+.WithSummary("Emite un nuevo comprobante electrónico (SUNAT)")
+.WithDescription("Valida y procesa un comprobante usando UBL 2.1.");
 
 app.Run();
