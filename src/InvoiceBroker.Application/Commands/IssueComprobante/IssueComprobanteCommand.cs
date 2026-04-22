@@ -1,10 +1,16 @@
+using System.ComponentModel;
 using MediatR;
 
 namespace InvoiceBroker.Application.Commands.IssueComprobante;
 
 public class IssueComprobanteCommand : IRequest<Guid>
 {
-    public string Serie { get; set; } = "F001";
-    public string Correlativo { get; set; } = "1";
-    public decimal SubTotal { get; set; } = 100.00m;
+    [DefaultValue("F001")]
+    public string Serie { get; set; } = string.Empty;
+
+    [DefaultValue("1")]
+    public string Correlativo { get; set; } = string.Empty;
+
+    [DefaultValue(100.50)]
+    public decimal SubTotal { get; set; }
 }

@@ -9,12 +9,12 @@ public record Correlativo
     public Correlativo(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("Correlativo cannot be null or empty.");
+            throw new ArgumentException("El correlativo no puede ser nulo ni estar vacío.");
 
         // SUNAT Rule: Only numbers, 1 to 8 digits max. 
         // We apply Camino A (Normalization): padding with zeros to ensure 8 digits.
         if (!Regex.IsMatch(value, "^[0-9]{1,8}$"))
-            throw new ArgumentException($"Correlativo '{value}' format is invalid. Must be numeric up to 8 digits.");
+            throw new ArgumentException($"El formato del Correlativo '{value}' es inválido. Debe ser numérico y tener hasta 8 dígitos.");
 
         Value = value.PadLeft(8, '0');
     }
