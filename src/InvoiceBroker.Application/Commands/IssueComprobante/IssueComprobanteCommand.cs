@@ -1,16 +1,18 @@
-using System.ComponentModel;
 using MediatR;
 
 namespace InvoiceBroker.Application.Commands.IssueComprobante;
 
 public class IssueComprobanteCommand : IRequest<Guid>
 {
-    [DefaultValue("F001")]
+    /// <summary>Serie del comprobante.</summary>
+    /// <example>F001</example>
     public string Serie { get; set; } = string.Empty;
 
-    [DefaultValue("1")]
+    /// <summary>Número correlativo.</summary>
+    /// <example>1</example>
     public string Correlativo { get; set; } = string.Empty;
 
-    [DefaultValue(100.50)]
+    /// <summary>Subtotal (Valor de Venta) sin IGV.</summary>
+    /// <example>100.50</example>
     public decimal SubTotal { get; set; }
 }

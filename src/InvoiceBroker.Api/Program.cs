@@ -11,7 +11,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    var xmlFiles = new[] { "InvoiceBroker.Api.xml", "InvoiceBroker.Application.xml" };
+    foreach (var xmlFile in xmlFiles)
+    {
+        var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
+        if (System.IO.File.Exists(xmlPath))
+        {
+            c.IncludeXmlComments(xmlPath);
+        }
+    }
+});
 
 // Capa de Infraestructura (Base de datos en Memoria por defecto para MVP)
 builder.Services.AddDbContext<InvoiceBrokerDbContext>(options =>
