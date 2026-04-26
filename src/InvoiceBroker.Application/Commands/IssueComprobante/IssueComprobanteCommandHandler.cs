@@ -22,12 +22,17 @@ public class IssueComprobanteCommandHandler : IRequestHandler<IssueComprobanteCo
     {
         Serie serie = new Serie(request.Serie);
         Correlativo correlativo = new Correlativo(request.Correlativo);
+        Moneda moneda = new Moneda(request.Moneda);
+        RucEmisor rucEmisor = new RucEmisor(request.RucEmisor);
+        Monto subTotal = new Monto(request.SubTotal);
 
         Comprobante comprobante = new Comprobante(
             Guid.NewGuid(),
             serie,
             correlativo,
-            request.SubTotal
+            moneda,
+            rucEmisor,
+            subTotal
         );
 
         await _repository.AddAsync(comprobante);

@@ -15,4 +15,12 @@ public class IssueComprobanteCommand : IRequest<Guid>
     /// <summary>Subtotal (Valor de Venta) sin IGV.</summary>
     /// <example>100.50</example>
     public decimal SubTotal { get; set; }
+
+    /// <summary>Moneda del comprobante.</summary>
+    /// <example>PEN</example>
+    public string Moneda { get; set; } = string.Empty;
+
+    /// <summary>RUC del emisor.</summary>
+    /// <example>20123456789</example>
+    public string RucEmisor { get; set; } = string.Empty;
 }

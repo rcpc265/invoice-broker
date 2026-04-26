@@ -30,6 +30,36 @@ public class InvoiceBrokerDbContext : DbContext
                     correlativo => correlativo.Value,
                     value => new Correlativo(value))
                 .HasMaxLength(8);
+
+            entity.Property(c => c.Moneda)
+                .HasConversion(
+                    moneda => moneda.Value,
+                    value => new Moneda(value))
+                .HasMaxLength(3);
+
+            entity.Property(c => c.RucEmisor)
+                .HasConversion(
+                    ruc => ruc.Value,
+                    value => new RucEmisor(value))
+                .HasMaxLength(11);
+
+            entity.Property(c => c.SubTotal)
+                .HasConversion(
+                    monto => monto.Value,
+                    value => new Monto(value))
+                .HasPrecision(18, 2);
+
+            entity.Property(c => c.Igv)
+                .HasConversion(
+                    monto => monto.Value,
+                    value => new Monto(value))
+                .HasPrecision(18, 2);
+
+            entity.Property(c => c.Total)
+                .HasConversion(
+                    monto => monto.Value,
+                    value => new Monto(value))
+                .HasPrecision(18, 2);
         });
     }
 }

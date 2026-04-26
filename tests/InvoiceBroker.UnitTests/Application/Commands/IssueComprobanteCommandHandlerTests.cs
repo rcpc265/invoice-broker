@@ -21,7 +21,9 @@ public class IssueComprobanteCommandHandlerTests
         {
             Serie = "F001",
             Correlativo = "00000001",
-            SubTotal = 100m
+            SubTotal = 100m,
+            Moneda = "PEN",
+            RucEmisor = "20123456789"
         };
 
         // When
