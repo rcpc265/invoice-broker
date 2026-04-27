@@ -2,7 +2,7 @@ using MediatR;
 
 namespace InvoiceBroker.Application.Commands.IssueComprobante;
 
-public class IssueComprobanteCommand : IRequest<Guid>
+public class IssueComprobanteCommand : IRequest<IssueComprobanteResult>
 {
     /// <summary>Serie del comprobante.</summary>
     /// <example>F001</example>

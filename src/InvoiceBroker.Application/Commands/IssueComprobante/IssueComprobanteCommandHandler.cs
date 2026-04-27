@@ -7,7 +7,7 @@ using InvoiceBroker.Application.Common.Interfaces;
 
 namespace InvoiceBroker.Application.Commands.IssueComprobante;
 
-public class IssueComprobanteCommandHandler : IRequestHandler<IssueComprobanteCommand, Guid>
+public class IssueComprobanteCommandHandler : IRequestHandler<IssueComprobanteCommand, IssueComprobanteResult>
 {
     private readonly IComprobanteRepository _repository;
     private readonly ISunatService _sunatService;
@@ -18,7 +18,7 @@ public class IssueComprobanteCommandHandler : IRequestHandler<IssueComprobanteCo
         _sunatService = sunatService;
     }
 
-    public async Task<Guid> Handle(IssueComprobanteCommand request, CancellationToken cancellationToken)
+    public async Task<IssueComprobanteResult> Handle(IssueComprobanteCommand request, CancellationToken cancellationToken)
     {
         Serie serie = new Serie(request.Serie);
         Correlativo correlativo = new Correlativo(request.Correlativo);
@@ -40,6 +40,12 @@ public class IssueComprobanteCommandHandler : IRequestHandler<IssueComprobanteCo
         // Simular entrega a SUNAT
         await _sunatService.SendAsync(comprobante, cancellationToken);
 
-        return comprobante.Id;
+        return new IssueComprobanteResult
+        {
+            ComprobanteId = comprobante.Id,
+            Serie = comprobante.Serie.Value,
+            Correlativo = comprobante.Correlativo.Value,
+            Status = "Accepted"
+        };
     }
 }
