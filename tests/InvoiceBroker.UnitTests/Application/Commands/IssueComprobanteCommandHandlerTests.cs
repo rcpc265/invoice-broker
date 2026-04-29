@@ -14,6 +14,9 @@ public class IssueComprobanteCommandHandlerTests
     {
         // Given
         var repositoryMock = Substitute.For<IComprobanteRepository>(); 
+        var unitOfWorkMock = Substitute.For<IUnitOfWork>();
+        repositoryMock.UnitOfWork.Returns(unitOfWorkMock);
+
         var sunatMock = Substitute.For<ISunatService>();
         var handler = new IssueComprobanteCommandHandler(repositoryMock, sunatMock);
         

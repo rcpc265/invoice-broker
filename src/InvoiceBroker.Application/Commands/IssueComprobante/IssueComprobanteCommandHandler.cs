@@ -36,6 +36,7 @@ public class IssueComprobanteCommandHandler : IRequestHandler<IssueComprobanteCo
         );
 
         await _repository.AddAsync(comprobante);
+        await _repository.UnitOfWork.SaveChangesAsync(cancellationToken);
         
         // Simular entrega a SUNAT
         await _sunatService.SendAsync(comprobante, cancellationToken);

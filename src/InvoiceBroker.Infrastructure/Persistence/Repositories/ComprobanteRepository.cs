@@ -12,10 +12,11 @@ public class ComprobanteRepository : IComprobanteRepository
         _dbContext = dbContext;
     }
 
+    public IUnitOfWork UnitOfWork => _dbContext;
+
     public async Task AddAsync(Comprobante comprobante)
     {
         await _dbContext.Comprobantes.AddAsync(comprobante);
-        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<Comprobante?> GetByIdAsync(Guid id)

@@ -31,6 +31,7 @@ public class ComprobanteRepositoryTests
 
         // When
         await repository.AddAsync(comprobante);
+        await repository.UnitOfWork.SaveChangesAsync();
 
         // Then
         Comprobante? savedComprobante = await dbContext.Comprobantes.FirstOrDefaultAsync();
