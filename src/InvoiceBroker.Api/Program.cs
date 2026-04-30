@@ -5,6 +5,7 @@ using InvoiceBroker.Infrastructure.Persistence.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using InvoiceBroker.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,11 +28,13 @@ builder.Services.AddSwaggerGen(c =>
 // Capa de Infraestructura (Base de datos en Memoria por defecto para MVP)
 builder.Services.AddDbContext<InvoiceBrokerDbContext>(options =>
     options.UseInMemoryDatabase("InvoiceBrokerDb"));
+builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<InvoiceBrokerDbContext>());
 builder.Services.AddScoped<IComprobanteRepository, ComprobanteRepository>();
 builder.Services.AddScoped<InvoiceBroker.Application.Common.Interfaces.ISunatService, InvoiceBroker.Infrastructure.Services.MockSunatService>();
+builder.Services.AddScoped<InvoiceBroker.Application.Common.Interfaces.IUbl21Generator, InvoiceBroker.Infrastructure.Services.Ubl21Generator>();
 
-// Capa de Aplicación (MediatR)
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(IssueComprobanteCommand).Assembly));
+// Capa de Aplicación (MediatR y Validadores)
+builder.Services.AddApplication();
 
 var app = builder.Build();
 
@@ -55,10 +58,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Our Minimal API Endpoint
-app.MapPost("/api/comprobantes", async (IssueComprobanteCommand command, IMediator mediator) =>
+app.MapPost("/api/v1/comprobantes", async (IssueComprobanteCommand command, IMediator mediator) =>
 {
-    Guid id = await mediator.Send(command);
-    return Results.Ok(new { Id = id });
+    IssueComprobanteResult result = await mediator.Send(command);
+    return Results.Ok(result);
 })
 .WithName("IssueComprobante")
 .WithSummary("Emite un nuevo comprobante electrónico (SUNAT)")
