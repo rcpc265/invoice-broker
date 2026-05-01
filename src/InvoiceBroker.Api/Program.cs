@@ -32,6 +32,7 @@ builder.Services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<InvoiceBroke
 builder.Services.AddScoped<IComprobanteRepository, ComprobanteRepository>();
 builder.Services.AddScoped<InvoiceBroker.Application.Common.Interfaces.ISunatService, InvoiceBroker.Infrastructure.Services.MockSunatService>();
 builder.Services.AddScoped<InvoiceBroker.Application.Common.Interfaces.IUbl21Generator, InvoiceBroker.Infrastructure.Services.Ubl21Generator>();
+builder.Services.AddScoped<InvoiceBroker.Application.Common.Interfaces.IXmlSigner, InvoiceBroker.Infrastructure.Services.XmlSigner>();
 
 // Capa de Aplicación (MediatR y Validadores)
 builder.Services.AddApplication();

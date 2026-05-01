@@ -8,11 +8,13 @@ public class MockSunatService : ISunatService
 {
     private readonly ILogger<MockSunatService> _logger;
     private readonly IUbl21Generator _ublGenerator;
+    private readonly IXmlSigner _xmlSigner;
 
-    public MockSunatService(ILogger<MockSunatService> logger, IUbl21Generator ublGenerator)
+    public MockSunatService(ILogger<MockSunatService> logger, IUbl21Generator ublGenerator, IXmlSigner xmlSigner)
     {
         _logger = logger;
         _ublGenerator = ublGenerator;
+        _xmlSigner = xmlSigner;
     }
 
     public async Task SendAsync(Comprobante comprobante, CancellationToken cancellationToken = default)
@@ -21,7 +23,8 @@ public class MockSunatService : ISunatService
             comprobante.Serie.Value, comprobante.Correlativo.Value);
 
         string xmlUbl = _ublGenerator.GenerateInvoiceXml(comprobante);
-        _logger.LogInformation("MockSunatService: XML generado correctamente ({Bytes} bytes)", xmlUbl.Length);
+        string signedXml = _xmlSigner.SignXml(xmlUbl);
+        _logger.LogInformation("MockSunatService: XML generado y firmado correctamente ({Bytes} bytes)", signedXml.Length);
 
         // Simulamos un retraso de red (2 segundos) hacia el WS de SUNAT
         await Task.Delay(2000, cancellationToken);
