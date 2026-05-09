@@ -7,17 +7,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace InvoiceBroker.IntegrationTests.Infrastructure.Repositories;
 
-public class ComprobanteRepositoryTests
+public class ComprobanteRepositoryTests : IClassFixture<DatabaseFixture>
 {
+    private readonly DatabaseFixture _fixture;
+
+    public ComprobanteRepositoryTests(DatabaseFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
     [Fact]
     public async Task Given_ValidComprobante_When_AddAsync_Then_SavesToDatabase()
     {
         // Given
         var options = new DbContextOptionsBuilder<InvoiceBrokerDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .UseSqlServer(_fixture.ConnectionString)
             .Options;
             
         using InvoiceBrokerDbContext dbContext = new InvoiceBrokerDbContext(options);
+        
+        // I think I need to create the database schema first?
+        // Let's try without it and see if EF core does it automatically...
+        
         ComprobanteRepository repository = new ComprobanteRepository(dbContext);
         
         Guid id = Guid.NewGuid();
