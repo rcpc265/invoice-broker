@@ -26,8 +26,8 @@ public class ComprobanteRepositoryTests : IClassFixture<DatabaseFixture>
             
         using InvoiceBrokerDbContext dbContext = new InvoiceBrokerDbContext(options);
         
-        // I think I need to create the database schema first?
-        // Let's try without it and see if EF core does it automatically...
+        // Fix: EF Core needs to create the schema in the SQL Server container
+        await dbContext.Database.EnsureCreatedAsync();
         
         ComprobanteRepository repository = new ComprobanteRepository(dbContext);
         
