@@ -9,10 +9,10 @@ public class MonedaTests
     public void Given_ValidMoneda_When_Created_Then_ValueIsSet()
     {
         // Given
-        string validMoneda = "PEN";
+        var validMoneda = "PEN";
 
         // When
-        Moneda moneda = new Moneda(validMoneda);
+        var moneda = new Moneda(validMoneda);
 
         // Then
         moneda.Value.Should().Be("PEN");
