@@ -31,14 +31,14 @@ public class ComprobanteRepositoryTests : IClassFixture<DatabaseFixture>
         
         ComprobanteRepository repository = new ComprobanteRepository(dbContext);
         
-        Guid id = Guid.NewGuid();
-        Serie serie = new Serie("F001");
-        Correlativo correlativo = new Correlativo("1"); // It will pad to 00000001
-        Moneda moneda = new Moneda("PEN");
-        RucEmisor rucEmisor = new RucEmisor("20123456789");
-        Monto subTotal = new Monto(100m);
+        var id = Guid.NewGuid();
+        var serie = new Serie("F001");
+        var correlativo = new Correlativo("1"); // It will pad to 00000001
+        var moneda = new Moneda("PEN");
+        var rucEmisor = new RucEmisor("20123456789");
+        var subTotal = new Monto(100m);
         
-        Comprobante comprobante = new Comprobante(id, serie, correlativo, moneda, rucEmisor, subTotal);
+        var comprobante = new Comprobante(id, serie, correlativo, moneda, rucEmisor, subTotal);
 
         // When
         await repository.AddAsync(comprobante);
