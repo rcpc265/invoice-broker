@@ -37,6 +37,9 @@ builder.Services.AddScoped<InvoiceBroker.Application.Common.Interfaces.IXmlSigne
 // Capa de Aplicación (MediatR y Validadores)
 builder.Services.AddApplication();
 
+builder.Services.AddExceptionHandler<InvoiceBroker.Api.Infrastructure.ExceptionHandling.GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -56,6 +59,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 // Our Minimal API Endpoint
