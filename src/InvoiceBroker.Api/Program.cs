@@ -25,6 +25,10 @@ builder.Services.AddSwaggerGen(c =>
     }
 });
 
+// Opciones (Options Pattern)
+builder.Services.Configure<InvoiceBroker.Infrastructure.Configuration.SunatOptions>(
+    builder.Configuration.GetSection(InvoiceBroker.Infrastructure.Configuration.SunatOptions.SectionName));
+
 // Capa de Infraestructura (Base de datos en Memoria por defecto para MVP)
 builder.Services.AddDbContext<InvoiceBrokerDbContext>(options =>
     options.UseInMemoryDatabase("InvoiceBrokerDb"));

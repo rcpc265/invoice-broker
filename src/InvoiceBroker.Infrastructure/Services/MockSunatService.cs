@@ -1,7 +1,9 @@
 using System.Net.Http;
 using InvoiceBroker.Application.Common.Interfaces;
 using InvoiceBroker.Domain.Entities;
+using InvoiceBroker.Infrastructure.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Polly;
 using Polly.CircuitBreaker;
 using Polly.Retry;
@@ -16,16 +18,22 @@ public class MockSunatService : ISunatService
     private readonly AsyncRetryPolicy _retryPolicy;
     private readonly AsyncCircuitBreakerPolicy _circuitBreakerPolicy;
 
-    public MockSunatService(ILogger<MockSunatService> logger, IUbl21Generator ublGenerator, IXmlSigner xmlSigner)
+    public MockSunatService(
+        ILogger<MockSunatService> logger, 
+        IUbl21Generator ublGenerator, 
+        IXmlSigner xmlSigner,
+        IOptions<SunatOptions> options)
     {
         _logger = logger;
         _ublGenerator = ublGenerator;
         _xmlSigner = xmlSigner;
 
+        var config = options.Value;
+
         _retryPolicy = Policy
             .Handle<HttpRequestException>()
             .Or<TimeoutException>()
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            .WaitAndRetryAsync(config.RetryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (exception, timeSpan, retryCount, context) =>
                 {
                     _logger.LogWarning("SUNAT Mock Falló. Reintento {RetryCount} en {Delay}s debido a: {Message}",
@@ -35,7 +43,7 @@ public class MockSunatService : ISunatService
         _circuitBreakerPolicy = Policy
             .Handle<HttpRequestException>()
             .Or<TimeoutException>()
-            .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30),
+            .CircuitBreakerAsync(config.CircuitBreakerThreshold, TimeSpan.FromSeconds(config.CircuitBreakerDurationSeconds),
                 (exception, duration) =>
                 {
                     _logger.LogError("Circuit Breaker OPEN durante {Duration}s debido a: {Message}", duration.TotalSeconds, exception.Message);
