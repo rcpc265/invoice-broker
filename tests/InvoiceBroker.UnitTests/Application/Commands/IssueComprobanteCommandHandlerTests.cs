@@ -30,7 +30,7 @@ public class IssueComprobanteCommandHandlerTests
         };
 
         // When
-        IssueComprobanteResult result = await handler.Handle(command, CancellationToken.None);
+        var result = await handler.Handle(command, CancellationToken.None);
 
         // Then
         result.Should().NotBeNull();
