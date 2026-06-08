@@ -23,3 +23,4 @@ services:
 
 volumes:
   sqlserver_data:
+# Trigger release
