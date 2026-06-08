@@ -34,6 +34,15 @@ jobs:
         with:
           node-version: 'lts/*'
 
+      - name: Build Windows x64 Binary
+        run: dotnet publish src/InvoiceBroker.Api/InvoiceBroker.Api.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o out/windows
+
+      - name: Build Linux x64 Binary
+        run: dotnet publish src/InvoiceBroker.Api/InvoiceBroker.Api.csproj -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -o out/linux
+
+      - name: Build macOS x64 Binary
+        run: dotnet publish src/InvoiceBroker.Api/InvoiceBroker.Api.csproj -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -o out/macos
+
       - name: Generate Auto-Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -11,6 +11,27 @@
         "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
       }
     ],
-    "@semantic-release/github"
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "out/windows/InvoiceBroker.Api.exe",
+            "name": "InvoiceBroker-win-x64.exe",
+            "label": "Windows x64 Executable"
+          },
+          {
+            "path": "out/linux/InvoiceBroker.Api",
+            "name": "InvoiceBroker-linux-x64",
+            "label": "Linux x64 Binary"
+          },
+          {
+            "path": "out/macos/InvoiceBroker.Api",
+            "name": "InvoiceBroker-osx-x64",
+            "label": "macOS x64 Binary"
+          }
+        ]
+      }
+    ]
   ]
 }
