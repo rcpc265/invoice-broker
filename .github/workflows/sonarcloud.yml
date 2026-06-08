@@ -11,6 +11,7 @@ jobs:
   build:
     name: Build and analyze
     runs-on: ubuntu-latest
+    if: ${{ secrets.SONAR_TOKEN != '' }}
     
     steps:
       - name: Set up JDK 17

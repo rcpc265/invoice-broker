@@ -1,11 +1,10 @@
-# InvoiceBroker (Mi primer proyecto .NET)
+# InvoiceBroker
 
-> Middleware asíncrono para emisión de facturación electrónica a SUNAT (Perú) con UBL 2.1.
-> *Estado: En Progreso (Migrando de InMemory a SQL Server con Testcontainers)*
+> Middleware asíncrono y tolerante a fallos para la emisión de facturación electrónica a SUNAT (Perú) utilizando UBL 2.1.
 
-## 🚀 Inicio Rápido 
+## 🚀 Inicio Rápido
 
-Por ahora, el proyecto utiliza una base de datos en memoria para facilitar las pruebas.
+El proyecto está diseñado para funcionar de manera autónoma utilizando un contenedor SQL Server efímero para pruebas de integración reales mediante Testcontainers, o usando una base de datos local a través de Docker Compose.
 
 1. Clonar el repositorio.
 2. Abrir una terminal en la raíz del proyecto.
@@ -13,21 +12,25 @@ Por ahora, el proyecto utiliza una base de datos en memoria para facilitar las p
    ```bash
    dotnet run --project src/InvoiceBroker.Api
    ```
-4. Navegar a **http://localhost:5000/scalar/v1** o **http://localhost:5000/swagger** para ver el panel interactivo de la API.
+4. Navegar a **http://localhost:5000/scalar/v1** o **http://localhost:5000/swagger** para interactuar con la API.
 
-*(Nota: Estoy trabajando en la configuración de Docker Compose para levantar la base de datos SQL Server real).*
+## 📦 Arquitectura
 
-## 📦 Arquitectura (Lo que he aprendido hasta ahora)
+El proyecto implementa estrictamente los principios de **Clean Architecture** y **Domain-Driven Design (DDD)**:
 
-He estructurado este proyecto basándome en tutoriales de **Clean Architecture** y principios **DDD**. Hasta el momento he logrado implementar:
-- **CQRS con MediatR:** Separación de comandos y consultas.
-- **Validaciones:** Uso de `FluentValidation` en el pipeline de MediatR para asegurar que los datos del comprobante sean correctos antes de llegar al dominio.
-- **Resiliencia:** Integración básica con `Polly` para manejar reintentos y circuit breakers al comunicarse con SUNAT.
-- **Generación XML (UBL 2.1):** Un simulador que genera la estructura XML requerida por SUNAT.
+- **Dominio:** Entidades y Value Objects puros (inmutabilidad y encapsulamiento estricto). Reglas de negocio agnósticas de infraestructura.
+- **Aplicación:** Arquitectura CQRS impulsada por **MediatR**. Validación robusta mediante **FluentValidation** integrada en el pipeline, garantizando que el dominio solo reciba comandos válidos.
+- **Infraestructura:** Integración simulada con el servicio SOAP de SUNAT (`billService`). La resiliencia está asegurada mediante **Polly** (Circuit Breaker y Exponential Backoff).
+- **API:** Minimal APIs en ASP.NET Core 8 con un `IExceptionHandler` global para la estandarización de respuestas de error.
 
-## 🛠️ Próximos Pasos (Mi Roadmap)
-- [ ] Configurar Testcontainers para pruebas de integración reales.
-- [ ] Conectar la base de datos EF Core a SQL Server mediante Docker.
-- [ ] Implementar la firma digital criptográfica XMLDSig real.
-- [ ] Escribir documentación detallada del Dominio y arquitectura.
-- [ ] Agregar flujos CI/CD con GitHub Actions (SonarQube y Auto-Releases).
+## ⚙️ Características Técnicas
+
+- Generación estructural de **UBL 2.1** para facturación electrónica.
+- Inyección robusta de dependencias usando el patrón Options (`IOptions<T>`) para la configuración de la SUNAT.
+- Pruebas de Integración con **Testcontainers** (SQL Server).
+- Flujos de Integración y Entrega Continua (CI/CD) usando GitHub Actions (SonarCloud y Semantic Release).
+
+## 📄 Documentación Extendida
+
+- [Arquitectura Detallada (CQRS y Clean Architecture)](docs/architecture.md)
+- [Integración con SUNAT y UBL 2.1](docs/sunat_integration.md)
