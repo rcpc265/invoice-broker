@@ -8,11 +8,21 @@ El proyecto está diseñado para funcionar de manera autónoma utilizando un con
 
 1. Clonar el repositorio.
 2. Abrir una terminal en la raíz del proyecto.
-3. Ejecutar:
+
+### Opción A: Todo en Contenedores (Docker Compose)
+3. Levantar la API y la Base de Datos:
    ```bash
+   docker compose up --build -d
+   ```
+4. Navegar a **http://localhost:8080/scalar/v1** o **http://localhost:8080/swagger** para interactuar con la API.
+
+### Opción B: Desarrollo Local (.NET CLI)
+3. Levantar solo la base de datos y correr la app manualmente:
+   ```bash
+   docker compose up -d sqlserver
    dotnet run --project src/InvoiceBroker.Api
    ```
-4. Navegar a **http://localhost:5000/scalar/v1** o **http://localhost:5000/swagger** para interactuar con la API.
+4. Navegar a **http://localhost:5000/scalar/v1** o **http://localhost:5000/swagger**.
 
 ## 📦 Arquitectura
 
